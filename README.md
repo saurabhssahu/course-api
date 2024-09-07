@@ -1,0 +1,2 @@
+# course-api
+This repository is a learning project focused on exploring and mastering the fundamentals of Spring with Java Spring Boot and Maven. It serves as a hands-on guide to building and managing RESTful APIs using Spring Boot, while also diving into various concepts like dependency injection, data persistence, and application configuration.
