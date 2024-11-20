@@ -84,19 +84,41 @@ We are talking about Application level security.
      provide authorities
    - Roles are coarse-grained.
 
-[Difference between Roles & Granted Authority](https://www.geeksforgeeks.org/difference-between-role-and-grantedauthority-in-spring-security/)
+- [Difference between Roles & Granted Authority](https://www.geeksforgeeks.org/difference-between-role-and-grantedauthority-in-spring-security/)
 
-Servlets and Filters: Servlets are mapped to specific URLS while filters are mapped to all URLS
+- Servlets and Filters: Servlets are mapped to specific URLs while filters could be mapped to all URLs
 ![Servlets and filters](../images/servlets-and-filters.png)
 
-Spring Security default behaviour:
-1. Adds mandatory authentication for URLs.
-2. Adds login form.
-3. Handles login error.
-4. Creates a user and sets a default password.
+- Spring Security default behaviour:
+  1. Adds mandatory authentication for URLs.
+  2. Adds login form.
+  3. Handles login error.
+  4. Creates a user and sets a default password.
 
-AuthenticationManager - manages authentication in a SpringBoot Security app. It has a method called `authenticate()`.
-@EnableWebSecurity - tells spring security that it is web security configuration.
+- AuthenticationManager - manages authentication in a SpringBoot Security app. It has a method called `authenticate()`.
+- @EnableWebSecurity - tells spring security that it is web security configuration.
 
-HttpSecurity - helps configure what are the paths and what are the access restrictions for those paths
+- HttpSecurity - helps configure what are the paths and what are the access restrictions for those paths
 ![WebSecurityConfigurerAdapter](../images/WebSecurityConfigurerAdapter.png) - for configuring authentication and authorisation.
+
+- ### **How Spring Security Authentication works**
+
+  ![Complete authentication flow](../images/authentication-flow.png) 
+- Here we are looking Provider pattern
+
+  - [Authentication](https://docs.spring.io/spring-security/site/docs/4.0.x/apidocs/org/springframework/security/core/Authentication.html) in Spring Security is an interface and its object act as a data transfer object. It takes the  
+    credentials as input before authentication and returns the Principal (user data) as output.
+  - [AuthenticationManager](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/authentication/AuthenticationManager.html) delegates the authentication to the AuthenticationProvider.
+    - It calls the `supports` method provided by the AuthenticationProvider to check if the provider supports the authentication or not.
+    - It returns an Authentication object after successful authentication or throws an authentication exception if the authentication fails.
+  - [AuthenticationProvider](https://docs.spring.io/spring-security/site/docs/4.2.x/apidocs/org/springframework/security/authentication/AuthenticationProvider.html) is an interface which has a method called `authenticate()` responsible for authentication.
+    - This AuthenticationProvider takes Authentication object as input with credentials as parameters and after 
+      successful authentication returns Authentication object with authenticated user data known as Principal.
+    - Each application can have multiple AuthenticationProvider, each one knowing how to authenticate (OAuth, SSO, LDAP)
+    - They also have a method called `support()` which tells if the provider supports the authentication or not. (boolean)
+  - UserDetailsService returns object of type [UserDetails](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/core/userdetails/UserDetails.html) which contains all the information about the user.
+    - This UserDetails objects may be passed on as Principal once the user is authenticated.
+  - Once successful authentication, the filter saves the Authentication object with the Principal details in the 
+    SecurityContext which is associated with the current thread which is used to identify the current user.
+  - There is another filter which is responsible for associating the authenticated principal with the user's session 
+    so that we don't have to authenticate again and again in subsequent requests.
