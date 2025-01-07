@@ -34,13 +34,14 @@ public class SecurityConfiguration {
 //    }
 
     /**
-     * For embedded H2 db with default schema and tables
+     * For embedded H2 db with default/custom schema and tables
      */
     @Bean
     public DataSource dataSource() {
         return new EmbeddedDatabaseBuilder()
                 .setType(EmbeddedDatabaseType.H2)
-                .addScript(JdbcDaoImpl.DEFAULT_USER_SCHEMA_DDL_LOCATION)
+                // comment below line then it will create tables and users through schema.sql and data.sql
+//                .addScript(JdbcDaoImpl.DEFAULT_USER_SCHEMA_DDL_LOCATION)
                 .build();
     }
 
@@ -56,11 +57,12 @@ public class SecurityConfiguration {
         // users.setUsersByUsernameQuery("select username, password, enabled from my_users where username = ?");
 
         // In case we use different datasource like sql, oracle and different tables like my_authorities
-        //users.setAuthoritiesByUsernameQuery("select username, authority from my_authorities where username = ?");
+        // users.setAuthoritiesByUsernameQuery("select username, authority from my_authorities where username = ?");
 
-        // When using default schema and tables
-        users.createUser(getUserDetails("default_user", "default user", "USER"));
-        users.createUser(getUserDetails("default_admin", "default admin", "ADMIN"));
+        // When using default schema and tables, used to  create users with their authorities
+        // comment below lines then it will create through schema.sql and data.sql
+//        users.createUser(getUserDetails("default_user", "default user", "USER"));
+//        users.createUser(getUserDetails("default_admin", "default admin", "ADMIN"));
 
         return users;
     }
