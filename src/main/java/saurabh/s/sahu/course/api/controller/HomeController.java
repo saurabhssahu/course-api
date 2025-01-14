@@ -12,16 +12,15 @@ public class HomeController {
           return ("<h1>Welcome</h1>");
     }
 
-    @GetMapping("/user")
+    @GetMapping(path = {"/user", "/users"})
     public String getUser()
     {
         return ("<h1>Welcome User</h1>");
     }
 
-    @GetMapping("/admin")
+    @GetMapping({"/admin", "/admins"})
     public String getAdmin()
     {
         return ("<h1>Welcome Admin</h1>");
     }
-
 }

@@ -20,6 +20,11 @@ The class with the main method creates Servlet container, starts it and hosts th
 `Controller`- A Java class, marked with annotations which lets Spring know what is the URL it is mapping to and what
 should happen when a request comes to that URL.
 
+[Difference between @Controller and @RestController](https://www.geeksforgeeks.org/difference-between-controller-and-restcontroller-annotation-in-spring/):
+
+- @Controller: returns HTML, JSON, XML, etc.
+- @RestController: returns JSON, XML, etc.
+
 `Service`- In Spring Business Services are Singleton (ensures only one instance of itself exists).
 
 Bill of Materials - The preset list of possible combinations of jars that works well without issues.
@@ -122,3 +127,8 @@ We are talking about Application level security.
     SecurityContext which is associated with the current thread which is used to identify the current user.
   - There is another filter which is responsible for associating the authenticated principal with the user's session 
     so that we don't have to authenticate again and again in subsequent requests.
+
+![Spring JPA Authentication](../images/jpa-authentication.png)
+
+- Spring Security **JPA Authentication**  - here we create an instance of UserDetails Service and then Spring Security
+  uses it for authentication
