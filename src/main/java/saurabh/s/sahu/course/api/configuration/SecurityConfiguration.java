@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -62,7 +64,7 @@ public class SecurityConfiguration {
 //        return users;
 //    }
 
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     public SecurityConfiguration(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
@@ -89,6 +91,11 @@ public class SecurityConfiguration {
                 .formLogin(Customizer.withDefaults());
 
         return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder getPasswordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
     }
 
     private UserDetails getUserDetails(String username, String password, String... roles) {
