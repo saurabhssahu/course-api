@@ -1,6 +1,5 @@
 package saurabh.s.sahu.course.api.model;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,8 +14,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Column(name = "user_name") // Map the 'username' field to the 'user_name' column
-    private String username;
+    //    @Column(name = "user_name") // Map the 'username' field to the 'user_name' column
+    private String userName;
 
     private String password;
     private String roles;
@@ -30,12 +29,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPassword() {
