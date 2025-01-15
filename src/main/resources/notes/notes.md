@@ -128,7 +128,15 @@ We are talking about Application level security.
   - There is another filter which is responsible for associating the authenticated principal with the user's session 
     so that we don't have to authenticate again and again in subsequent requests.
 
-![Spring JPA Authentication](../images/jpa-authentication.png)
+- ![Spring JPA Authentication](../images/jpa-authentication.png)
 
-- Spring Security **JPA Authentication**  - here we create an instance of UserDetails Service and then Spring Security
-  uses it for authentication
+    - Spring Security **JPA Authentication**  - here we create an instance of UserDetails Service and then Spring
+      Security
+      uses it for authentication
+
+- Spring Security with LDAP (Lightweight Directory Access Protocol):
+    - LDAP is a protocol for accessing and maintaining a directory information over a network. (ex: store organisational
+      information)
+    - Ex: organisation has managers, departments etc. and LDAP helps with user authentication and authorisation.
+    - Spring security connects to LDAP server and uses LDAP to authenticate user and authorise them.
+    - LDIF - LDAP Data Interchange Format

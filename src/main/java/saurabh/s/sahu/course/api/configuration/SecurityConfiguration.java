@@ -1,22 +1,23 @@
 package saurabh.s.sahu.course.api.configuration;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.LdapShaPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableWebSecurity
 public class SecurityConfiguration {
 
     /**
@@ -78,6 +79,36 @@ public class SecurityConfiguration {
         return authConfig.getAuthenticationManager();
     }
 
+//    @Bean
+//    public AuthenticationManager localAuthenticationManager(AuthenticationManagerBuilder auth) throws Exception {
+//        return auth.ldapAuthentication()
+//                .userDnPatterns("uid={0},ou=people")
+//                .groupSearchBase("ou=groups")
+//                .groupRoleAttribute("uniquemember")
+//                .contextSource()
+//                .url("ldap://localhost:8389/dc=springframework,dc=org")
+//                .and()
+//                .passwordCompare()
+//                .passwordEncoder(new LdapShaPasswordEncoder())
+//                .passwordAttribute("userPassword");
+//    }
+
+    @Autowired
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.ldapAuthentication()
+                // dn: uid=ben,ou=people,dc=springframework,dc=org   ---  here use uid as username
+                // dn: cn=mouse\, jerry,ou=people,dc=springframework,dc=org   ---  here use cn as username
+                .userDnPatterns("uid={0},ou=people", "cn={0},ou=people") // Uses both pattern
+                .groupSearchBase("ou=groups")
+                .groupRoleAttribute("cn") // here CNs are used for role attributes. ex: developers, managers
+                .contextSource()
+                .url("ldap://localhost:8389/dc=springframework,dc=org")
+                .and()
+                .passwordCompare()
+                .passwordEncoder(new LdapShaPasswordEncoder())
+                .passwordAttribute("userPassword");
+    }
+
     /**
      * Authorization configuration
      */
@@ -85,9 +116,10 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.securityMatcher("/**") // This filter chain matches all remaining requests
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin").hasRole("ADMIN")
-                        .requestMatchers("/user").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers("/", "/login").permitAll())
+                        .requestMatchers("/admin").hasAnyRole("ADMIN", "MANAGERS") // the CNs should be passed here to authorise
+                        .requestMatchers("/user").hasAnyRole("ADMIN", "USER", "DEVELOPERS")
+                        .requestMatchers("/", "/login").permitAll()
+                        .anyRequest().fullyAuthenticated())
                 .formLogin(Customizer.withDefaults());
 
         return http.build();

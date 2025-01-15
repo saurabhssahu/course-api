@@ -67,6 +67,24 @@
 			<version>42.7.4</version>
 		</dependency>
 
+		<!--		This dependency provides the core functionality for LDAP operations, such as connecting to an LDAP server, searching, and modifying directory entries.-->
+		<dependency>
+			<groupId>org.springframework.ldap</groupId>
+			<artifactId>spring-ldap-core</artifactId>
+		</dependency>
+
+		<!--		This dependency integrates LDAP with Spring Security, allowing you to use LDAP for authentication and authorization in your application.-->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-ldap</artifactId>
+		</dependency>
+
+		<!--		This dependency provides an SDK for working with LDAP servers, offering features like connection pooling, asynchronous operations, and more. It's often used in conjunction with the first two dependencies.-->
+		<dependency>
+			<groupId>com.unboundid</groupId>
+			<artifactId>unboundid-ldapsdk</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
